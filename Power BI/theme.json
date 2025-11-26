@@ -1,0 +1,23 @@
+{
+  "name": "Tienda Aurelion - Medieval Theme",
+  "dataColors": [
+    "#D4AF37",
+    "#8B0000",
+    "#000080",
+    "#C0C0C0",
+    "#FFD700",
+    "#FF6347",
+    "#4169E1",
+    "#32CD32"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#000000",
+  "tableAccent": "#D4AF37",
+  "good": "#32CD32",
+  "neutral": "#FFD700",
+  "bad": "#FF6347",
+  "maximum": "#8B0000",
+  "center": "#C0C0C0",
+  "minimum": "#000080",
+  "null": "#666666"
+}

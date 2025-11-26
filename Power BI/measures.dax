@@ -1,0 +1,176 @@
+// ================================================
+// Medidas DAX - Tienda Aurelion
+// Sprint 2 - Base de Datos Normalizada
+// ================================================
+
+// ================================================
+// MEDIDAS DE PRODUCTOS
+// ================================================
+
+-- Valor Total Inventario
+Valor Total Inventario = 
+SUMX(
+    Productos,
+    Productos[precio] * Productos[stock]
+)
+
+-- Precio Promedio
+Precio Promedio = AVERAGE(Productos[precio])
+
+-- Stock Total
+Stock Total = SUM(Productos[stock])
+
+-- Productos con Stock Bajo
+Productos Stock Bajo = 
+COUNTROWS(
+    FILTER(Productos, Productos[stock] <= 20)
+)
+
+-- % Stock Saludable
+% Stock Saludable = 
+DIVIDE(
+    COUNTROWS(FILTER(Productos, Productos[stock] > 20)),
+    COUNTROWS(Productos),
+    0
+) * 100
+
+-- Valor por Producto (para Top N)
+Valor por Producto = 
+SUMX( 
+    VALUES(Productos[id]), 
+    FIRSTNONBLANK(Productos[precio],0) * FIRSTNONBLANK(Productos[stock],0) 
+)
+
+-- Producto Más Caro (nombre)
+Producto Más Caro Nombre = 
+CONCATENATEX( 
+    TOPN(1, ALL(Productos), Productos[precio], DESC), 
+    Productos[nombre], 
+    ", " 
+)
+
+-- Valor Promedio por Producto
+Valor Promedio por Producto = 
+DIVIDE(
+    [Valor Total Inventario],
+    COUNTROWS(Productos),
+    0
+)
+
+-- Días Estimados de Inventario (asumiendo 5 ventas/día)
+Días de Inventario = 
+DIVIDE(
+    [Stock Total],
+    5,
+    0
+)
+
+// ================================================
+// MEDIDAS DE VENTAS ⭐ NUEVO
+// ================================================
+
+-- Total de Ventas
+Total Ventas = COUNTROWS(Ventas)
+
+-- Ingresos Totales
+Ingresos Totales = SUM(Ventas[total])
+
+-- Promedio de Venta
+Promedio Venta = AVERAGE(Ventas[total])
+
+-- Venta Máxima
+Venta Máxima = MAX(Ventas[total])
+
+-- Venta Mínima
+Venta Mínima = MIN(Ventas[total])
+
+-- Total de Productos Vendidos
+Total Productos Vendidos = SUM(Detalle_Ventas[cantidad])
+
+-- Ingresos por Mes
+Ingresos por Mes = 
+CALCULATE(
+    [Ingresos Totales],
+    DATESMTD(Ventas[fecha])
+)
+
+-- Total de Clientes Únicos
+Total Clientes Únicos = DISTINCTCOUNT(Ventas[id_cliente])
+
+// ================================================
+// MEDIDAS DE CLIENTES ⭐ NUEVO
+// ================================================
+
+-- Total de Clientes
+Total Clientes = COUNTROWS(Clientes)
+
+-- Clientes Nuevos (último mes)
+Clientes Nuevos = 
+CALCULATE(
+    COUNTROWS(Clientes),
+    FILTER(
+        Clientes,
+        Clientes[fecha_registro] >= DATE(YEAR(TODAY()), MONTH(TODAY())-1, 1)
+    )
+)
+
+-- Cliente con Más Compras
+Cliente con Más Compras = 
+VAR ClienteID = 
+    CALCULATE(
+        FIRSTNONBLANK(Ventas[id_cliente], 1),
+        TOPN(1, ALL(Ventas), [Ingresos Totales], DESC)
+    )
+RETURN
+    CALCULATE(
+        FIRSTNONBLANK(Clientes[nombre], ""),
+        Clientes[id] = ClienteID
+    )
+
+// ================================================
+// MEDIDAS COMBINADAS (Productos + Ventas)
+// ================================================
+
+-- Productos Más Vendidos (Top 5)
+Productos Más Vendidos = 
+CONCATENATEX(
+    TOPN(
+        5,
+        SUMMARIZE(
+            Detalle_Ventas,
+            Productos[nombre],
+            "Cantidad", SUM(Detalle_Ventas[cantidad])
+        ),
+        [Cantidad],
+        DESC
+    ),
+    Productos[nombre],
+    ", "
+)
+
+-- Ingresos por Categoría
+Ingresos por Categoría = 
+SUMX(
+    SUMMARIZE(
+        Detalle_Ventas,
+        Productos[categoria],
+        "Ingresos", SUM(Detalle_Ventas[subtotal])
+    ),
+    [Ingresos]
+)
+
+-- Ticket Promedio
+Ticket Promedio = 
+DIVIDE(
+    [Ingresos Totales],
+    [Total Ventas],
+    0
+)
+
+-- Rotación de Inventario (veces que se vendió el stock total)
+Rotación Inventario = 
+DIVIDE(
+    [Total Productos Vendidos],
+    [Stock Total],
+    0
+)

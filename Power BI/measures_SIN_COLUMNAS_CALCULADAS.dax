@@ -1,0 +1,201 @@
+// ================================================
+// MEDIDAS DAX - Tienda Aurelion Sprint 2
+// VERSIÓN SIMPLIFICADA (Sin columnas calculadas)
+// ================================================
+//
+// IMPORTANTE: Estas medidas NO requieren columnas calculadas
+// Funcionan directamente con las columnas del CSV
+//
+// Requisitos:
+// - Tabla "Productos" con columnas: id, nombre, categoria, precio, stock
+// - Tabla "Clientes" con columnas: id, nombre, email, ciudad
+// - Tabla "Ventas" con columnas: id_venta, id_cliente, fecha, total
+// - Tabla "Detalle_Ventas" con columnas: id_detalle, id_venta, id_producto, cantidad, subtotal
+//
+// ================================================
+
+// ================================================
+// MEDIDAS DE PRODUCTOS
+// ================================================
+
+Valor Total Inventario = 
+SUMX(
+    Productos,
+    Productos[precio] * Productos[stock]
+)
+
+Precio Promedio = 
+AVERAGE(Productos[precio])
+
+Stock Total = 
+SUM(Productos[stock])
+
+Productos Stock Bajo = 
+CALCULATE(
+    COUNTROWS(Productos),
+    Productos[stock] <= 20
+)
+
+% Stock Saludable = 
+DIVIDE(
+    CALCULATE(COUNTROWS(Productos), Productos[stock] > 20),
+    COUNTROWS(Productos),
+    0
+) * 100
+
+Valor Promedio por Producto = 
+DIVIDE(
+    [Valor Total Inventario],
+    COUNTROWS(Productos),
+    0
+)
+
+Total Productos = 
+COUNTROWS(Productos)
+
+Categorias Unicas = 
+DISTINCTCOUNT(Productos[categoria])
+
+Producto Más Caro Nombre = 
+CALCULATE(
+    MAX(Productos[nombre]),
+    TOPN(1, ALL(Productos), Productos[precio], DESC)
+)
+
+Producto Más Barato Nombre = 
+CALCULATE(
+    MAX(Productos[nombre]),
+    TOPN(1, ALL(Productos), Productos[precio], ASC)
+)
+
+// ================================================
+// MEDIDAS DE VENTAS
+// ================================================
+
+Total Ventas = 
+COUNTROWS(Ventas)
+
+Ingresos Totales = 
+SUM(Ventas[total])
+
+Promedio Venta = 
+AVERAGE(Ventas[total])
+
+Venta Máxima = 
+MAX(Ventas[total])
+
+Venta Mínima = 
+MIN(Ventas[total])
+
+Total Productos Vendidos = 
+SUM(Detalle_Ventas[cantidad])
+
+Total Clientes Únicos = 
+DISTINCTCOUNT(Ventas[id_cliente])
+
+// ================================================
+// MEDIDAS DE CLIENTES
+// ================================================
+
+Total Clientes = 
+COUNTROWS(Clientes)
+
+Ciudades Unicas = 
+DISTINCTCOUNT(Clientes[ciudad])
+
+// ================================================
+// MEDIDAS COMBINADAS (KPIs)
+// ================================================
+
+Ticket Promedio = 
+DIVIDE(
+    [Ingresos Totales],
+    [Total Ventas],
+    0
+)
+
+Rotación Inventario = 
+DIVIDE(
+    [Total Productos Vendidos],
+    [Stock Total],
+    0
+)
+
+Ingresos por Cliente = 
+DIVIDE(
+    [Ingresos Totales],
+    [Total Clientes Únicos],
+    0
+)
+
+// ================================================
+// MEDIDAS PARA TOP N
+// ================================================
+
+Cantidad Vendida por Producto = 
+SUM(Detalle_Ventas[cantidad])
+
+Valor Inventario por Producto = 
+SUMX(
+    VALUES(Productos[id]),
+    CALCULATE(
+        Productos[precio] * Productos[stock]
+    )
+)
+
+Ingresos por Categoria = 
+CALCULATE(
+    SUM(Detalle_Ventas[subtotal])
+)
+
+// ================================================
+// MEDIDAS PARA FORMATO CONDICIONAL
+// ================================================
+
+Color Stock = 
+VAR StockActual = SELECTEDVALUE(Productos[stock])
+RETURN
+    IF(
+        StockActual <= 10, "Rojo",
+        IF(StockActual <= 20, "Amarillo", "Verde")
+    )
+
+// ================================================
+// MEDIDAS DE TIEMPO (Para gráficos de línea)
+// ================================================
+
+Ingresos por Mes = 
+CALCULATE(
+    [Ingresos Totales]
+)
+
+Ventas por Mes = 
+CALCULATE(
+    [Total Ventas]
+)
+
+// ================================================
+// MEDIDAS ADICIONALES ÚTILES
+// ================================================
+
+Precio Máximo = 
+MAX(Productos[precio])
+
+Precio Mínimo = 
+MIN(Productos[precio])
+
+Stock Máximo = 
+MAX(Productos[stock])
+
+Stock Mínimo = 
+MIN(Productos[stock])
+
+Proveedores Únicos = 
+DISTINCTCOUNT(Productos[proveedor])
+
+// ================================================
+// FIN DE MEDIDAS DAX
+// ================================================
+
+
+

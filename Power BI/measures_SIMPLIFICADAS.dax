@@ -1,0 +1,130 @@
+// ================================================
+// MEDIDAS DAX SIMPLIFICADAS - Tienda Aurelion
+// Sprint 2 - VERSIÓN CON DIAGNÓSTICO
+// ================================================
+//
+// INSTRUCCIONES:
+// 1. Verifica que tus tablas se llamen EXACTAMENTE así:
+//    - Productos (con P mayúscula)
+//    - Clientes
+//    - Ventas
+//    - Detalle_Ventas
+//
+// 2. Si tus tablas tienen nombres diferentes, reemplaza en TODAS las medidas
+//
+// 3. Crea cada medida una por una en Power BI:
+//    Modeling → New Measure → Pegar el código → Enter
+//
+// ================================================
+
+// ================================================
+// MEDIDA DE PRUEBA - EMPIEZA CON ESTA
+// ================================================
+// Esta medida solo cuenta productos para verificar que la tabla funciona
+Test Productos = COUNTROWS(Productos)
+// Si esta medida da error, el problema es el nombre de la tabla
+
+
+// ================================================
+// MEDIDAS BÁSICAS DE PRODUCTOS
+// ================================================
+
+Valor Total Inventario = 
+SUMX(
+    Productos,
+    Productos[precio] * Productos[stock]
+)
+
+Precio Promedio = 
+AVERAGE(Productos[precio])
+
+Stock Total = 
+SUM(Productos[stock])
+
+Productos Stock Bajo = 
+CALCULATE(
+    COUNTROWS(Productos),
+    Productos[stock] <= 20
+)
+
+% Stock Saludable = 
+DIVIDE(
+    CALCULATE(COUNTROWS(Productos), Productos[stock] > 20),
+    COUNTROWS(Productos),
+    0
+) * 100
+
+
+// ================================================
+// MEDIDAS DE VENTAS
+// ================================================
+
+Total Ventas = 
+COUNTROWS(Ventas)
+
+Ingresos Totales = 
+SUM(Ventas[total])
+
+Promedio Venta = 
+AVERAGE(Ventas[total])
+
+Total Productos Vendidos = 
+SUM(Detalle_Ventas[cantidad])
+
+
+// ================================================
+// MEDIDAS DE CLIENTES
+// ================================================
+
+Total Clientes = 
+COUNTROWS(Clientes)
+
+Total Clientes Únicos = 
+DISTINCTCOUNT(Ventas[id_cliente])
+
+
+// ================================================
+// MEDIDAS COMBINADAS (KPIs)
+// ================================================
+
+Ticket Promedio = 
+DIVIDE(
+    [Ingresos Totales],
+    [Total Ventas],
+    0
+)
+
+Valor Promedio por Producto = 
+DIVIDE(
+    [Valor Total Inventario],
+    COUNTROWS(Productos),
+    0
+)
+
+
+// ================================================
+// NOTAS IMPORTANTES:
+// ================================================
+// 
+// Si alguna medida da error "No se encuentra la columna":
+// 
+// 1. Verifica que el nombre de la TABLA sea correcto:
+//    - Ve al panel Data (derecha)
+//    - Mira cómo se llama exactamente tu tabla
+//    - Reemplaza "Productos" por el nombre correcto
+//
+// 2. Verifica que el nombre de la COLUMNA sea correcto:
+//    - Expande la tabla en el panel Data
+//    - Verifica: precio, stock, total, cantidad, etc.
+//    - Si se llaman diferente, cámbialos en las medidas
+//
+// 3. Verifica los TIPOS DE DATOS:
+//    - precio: debe ser Número (123)
+//    - stock: debe ser Número (123)
+//    - total: debe ser Número (123)
+//    - Si son Texto (ABC), cámbialos en Data View
+//
+// ================================================
+
+
+
