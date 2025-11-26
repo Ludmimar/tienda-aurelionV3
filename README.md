@@ -10,7 +10,7 @@
 
 **¡Prueba la aplicación directamente en tu navegador sin instalaciones!**
 
-🔗 **[👉 Acceder a la Aplicación Web](https://tienda-aurelionv2.streamlit.app/)**
+🔗 **[👉 Acceder a la Aplicación Web](https://tienda-aurelionv3.streamlit.app/)**
 
 > ✨ **Incluye:** Gestión de productos, clientes y ventas | Análisis estadístico completo | Gráficos interactivos | Dashboard profesional
 
