@@ -1,6 +1,6 @@
 # 📊 ANÁLISIS ESTADÍSTICO - TIENDA AURELION
 
-**Sprint 2 - Introducción a la Inteligencia Artificial - IBM**
+**Sprint 3 - Machine Learning - IBM**
 
 > **Autor:** Martos Ludmila  
 > **DNI:** 34811650  

@@ -16,6 +16,18 @@ import csv
 import os
 from typing import List, Dict, Optional, Tuple
 
+# Imports para Machine Learning
+try:
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+    ML_DISPONIBLE = True
+except ImportError:
+    ML_DISPONIBLE = False
+    print("⚠️  Para usar Machine Learning, instala: pip install pandas numpy scikit-learn")
+
 # Constantes
 # Detectar automáticamente las rutas correctas de los CSVs
 def obtener_rutas_csv():
@@ -722,6 +734,10 @@ def mostrar_menu():
     print("║    14. Listar todos los clientes                                 ║")
     print("║    15. Ver estadísticas de clientes                              ║")
     print("╠" + "═" * 68 + "╣")
+    print("║  🤖 MACHINE LEARNING                                             ║")
+    print("║    16. Entrenar modelo de predicción de ventas                  ║")
+    print("║    17. Predecir total de una venta                              ║")
+    print("╠" + "═" * 68 + "╣")
     print("║     0. Salir del sistema                                        ║")
     print("╚" + "═" * 68 + "╝\n")
 
@@ -926,6 +942,182 @@ def estadisticas_clientes(clientes: List[Dict], ventas: List[Dict]):
         print(f"{'═' * 90}\n")
 
 
+# ============================================================================
+# MACHINE LEARNING - PREDICCIÓN DE VENTAS
+# ============================================================================
+
+def entrenar_modelo_ml(productos: List[Dict], ventas: List[Dict], detalle_ventas: List[Dict]):
+    """Entrena un modelo de Machine Learning para predecir ventas."""
+    limpiar_pantalla()
+    mostrar_banner()
+    print("🤖 MACHINE LEARNING - PREDICCIÓN DE VENTAS\n")
+    
+    if not ML_DISPONIBLE:
+        print("❌ Machine Learning no está disponible.")
+        print("   Instala las dependencias con: pip install pandas numpy scikit-learn")
+        return None
+    
+    print("⏳ Preparando datos y entrenando modelo...")
+    print("-" * 70)
+    
+    # Convertir a DataFrames
+    df_productos = pd.DataFrame(productos)
+    df_ventas = pd.DataFrame(ventas)
+    df_detalle = pd.DataFrame(detalle_ventas)
+    
+    # Convertir fecha
+    df_ventas['fecha'] = pd.to_datetime(df_ventas['fecha'])
+    
+    # Extraer características temporales
+    df_ventas['mes'] = df_ventas['fecha'].dt.month
+    df_ventas['dia_semana'] = df_ventas['fecha'].dt.dayofweek
+    df_ventas['dia_mes'] = df_ventas['fecha'].dt.day
+    
+    # Unir detalle con productos
+    df_detalle_productos = df_detalle.merge(
+        df_productos[['id', 'categoria', 'precio']], 
+        left_on='id_producto', 
+        right_on='id'
+    )
+    
+    # Calcular características por venta
+    caracteristicas_ventas = df_detalle_productos.groupby('id_venta').agg({
+        'cantidad': 'sum',
+        'id_producto': 'nunique',
+        'precio_unitario': 'mean',
+        'subtotal': 'sum',
+        'categoria': lambda x: x.mode()[0] if len(x.mode()) > 0 else x.iloc[0]
+    }).reset_index()
+    
+    caracteristicas_ventas.columns = [
+        'id_venta', 'cantidad_total', 'productos_unicos', 
+        'precio_promedio', 'subtotal_calculado', 'categoria_principal'
+    ]
+    
+    # Unir con ventas
+    df_ml = df_ventas.merge(caracteristicas_ventas, on='id_venta')
+    
+    # One-Hot Encoding para categoría
+    df_ml = pd.get_dummies(df_ml, columns=['categoria_principal'], prefix='cat')
+    
+    # Preparar X e y
+    columnas_excluir = ['id_venta', 'id_cliente', 'fecha', 'total', 'subtotal_calculado']
+    X = df_ml.drop(columns=columnas_excluir)
+    y = df_ml['total']
+    
+    # División train/test
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    print(f"\n📊 Datos preparados:")
+    print(f"   - Total de registros: {len(df_ml)}")
+    print(f"   - Entrenamiento: {len(X_train)} ({len(X_train)/len(X)*100:.0f}%)")
+    print(f"   - Prueba: {len(X_test)} ({len(X_test)/len(X)*100:.0f}%)")
+    
+    # Entrenar modelo
+    print("\n🌲 Entrenando Random Forest Regressor (100 árboles)...")
+    modelo = RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1)
+    modelo.fit(X_train, y_train)
+    
+    # Predicciones y métricas
+    y_pred_test = modelo.predict(X_test)
+    mae_test = mean_absolute_error(y_test, y_pred_test)
+    rmse_test = np.sqrt(mean_squared_error(y_test, y_pred_test))
+    r2_test = r2_score(y_test, y_pred_test)
+    mape_test = np.mean(np.abs((y_test - y_pred_test) / y_test)) * 100
+    
+    print("\n✅ ¡Modelo entrenado exitosamente!")
+    
+    print(f"\n{'═' * 70}")
+    print("  📊 MÉTRICAS DE EVALUACIÓN (Test)")
+    print(f"{'═' * 70}")
+    print(f"  • R² Score: {r2_test:.4f} ({r2_test*100:.2f}%)")
+    print(f"  • MAE: {mae_test:.2f} monedas")
+    print(f"  • RMSE: {rmse_test:.2f} monedas")
+    print(f"  • MAPE: {mape_test:.2f}%")
+    
+    print(f"\n💡 El modelo explica el {r2_test*100:.1f}% de la variabilidad en ventas")
+    print(f"   Error promedio: {mae_test:.0f} monedas por predicción")
+    
+    # Importancia de características
+    importancias = pd.DataFrame({
+        'caracteristica': X.columns,
+        'importancia': modelo.feature_importances_
+    }).sort_values('importancia', ascending=False)
+    
+    print(f"\n{'═' * 70}")
+    print("  🎯 TOP 5 CARACTERÍSTICAS MÁS IMPORTANTES")
+    print(f"{'═' * 70}")
+    for i, (_, row) in enumerate(importancias.head(5).iterrows(), 1):
+        barra = "█" * int(row['importancia'] * 40)
+        print(f"  {i}. {row['caracteristica']:<25} {barra} {row['importancia']*100:.1f}%")
+    
+    return {
+        'modelo': modelo,
+        'X_columns': X.columns.tolist(),
+        'metricas': {'r2': r2_test, 'mae': mae_test, 'rmse': rmse_test, 'mape': mape_test}
+    }
+
+
+def predecir_venta_interactivo(modelo_info: dict, productos: List[Dict]):
+    """Permite hacer predicciones interactivas."""
+    limpiar_pantalla()
+    mostrar_banner()
+    print("🔮 PREDICTOR INTERACTIVO DE VENTAS\n")
+    
+    if not ML_DISPONIBLE:
+        print("❌ Machine Learning no está disponible.")
+        return
+    
+    if modelo_info is None:
+        print("⚠️  Primero debes entrenar el modelo (opción 16).")
+        return
+    
+    print("Ingresa los parámetros de la venta:\n")
+    
+    cantidad = validar_entrada_numerica("  📦 Cantidad total de productos: ", minimo=1, maximo=100)
+    productos_unicos = validar_entrada_numerica("  🔢 Productos únicos: ", minimo=1, maximo=20)
+    precio_prom = validar_entrada_numerica("  💰 Precio promedio: ", minimo=25, maximo=5000)
+    mes = validar_entrada_numerica("  📅 Mes (1-12): ", minimo=1, maximo=12)
+    dia_semana = validar_entrada_numerica("  📆 Día semana (0=Lun, 6=Dom): ", minimo=0, maximo=6)
+    dia_mes = validar_entrada_numerica("  📅 Día del mes: ", minimo=1, maximo=31)
+    
+    # Crear DataFrame para predicción
+    nueva_venta = pd.DataFrame([{
+        'cantidad_total': cantidad,
+        'productos_unicos': productos_unicos,
+        'precio_promedio': precio_prom,
+        'mes': mes,
+        'dia_semana': dia_semana,
+        'dia_mes': dia_mes
+    }])
+    
+    # Agregar columnas de categorías (todas en 0, usar la primera como default)
+    for col in modelo_info['X_columns']:
+        if col not in nueva_venta.columns:
+            nueva_venta[col] = 0
+    
+    # Poner una categoría en 1
+    cat_cols = [c for c in modelo_info['X_columns'] if c.startswith('cat_')]
+    if cat_cols:
+        nueva_venta[cat_cols[0]] = 1
+    
+    nueva_venta = nueva_venta[modelo_info['X_columns']]
+    
+    # Hacer predicción
+    prediccion = modelo_info['modelo'].predict(nueva_venta)[0]
+    margen = modelo_info['metricas']['mae']
+    
+    print(f"\n{'═' * 70}")
+    print("  🎯 RESULTADO DE LA PREDICCIÓN")
+    print(f"{'═' * 70}")
+    print(f"\n  💰 Total de venta estimado: {prediccion:,.2f} monedas")
+    print(f"\n  📊 Rango de confianza (±MAE):")
+    print(f"     • Mínimo: {prediccion - margen:,.2f} monedas")
+    print(f"     • Máximo: {prediccion + margen:,.2f} monedas")
+    print(f"\n  ℹ️  Error promedio del modelo: {margen:.0f} monedas")
+    print(f"{'═' * 70}")
+
+
 def main():
     """Función principal del programa."""
     limpiar_pantalla()
@@ -940,13 +1132,16 @@ def main():
     
     pausar()
     
+    # Variable para el modelo ML
+    modelo_ml = None
+    
     # Bucle principal del menú
     while True:
         limpiar_pantalla()
         mostrar_banner()
         mostrar_menu()
         
-        opcion = validar_entrada_numerica("Selecciona una opción: ", minimo=0, maximo=15)
+        opcion = validar_entrada_numerica("Selecciona una opción: ", minimo=0, maximo=17)
         
         if opcion == 0:
             limpiar_pantalla()
@@ -990,6 +1185,10 @@ def main():
             listar_clientes(clientes)
         elif opcion == 15:
             estadisticas_clientes(clientes, ventas)
+        elif opcion == 16:
+            modelo_ml = entrenar_modelo_ml(productos, ventas, detalle_ventas)
+        elif opcion == 17:
+            predecir_venta_interactivo(modelo_ml, productos)
         
         pausar()
 

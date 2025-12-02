@@ -171,7 +171,7 @@ Consulta la sección "SOLUCIÓN DE PROBLEMAS COMUNES" en:
 
 **¡Éxito con tu dashboard! ⚔️📊**
 
-**Autor:** Martos Ludmila | **DNI:** 34811650 | **Sprint 2 - IBM 2025**
+**Autor:** Martos Ludmila | **DNI:** 34811650 | **Sprint 3 - IBM 2025**
 
 
 

@@ -2,7 +2,7 @@
 
 **Autor:** Martos Ludmila  
 **DNI:** 34811650  
-**Sprint:** 2 - Introducción a la Inteligencia Artificial  
+**Sprint:** 3 - Machine Learning  
 **Institución:** IBM
 
 ---
@@ -12,7 +12,8 @@
 Sistema integral de gestión de inventario para la Tienda Aurelion, que incluye:
 - Base de datos normalizada en 4 archivos CSV
 - Programa Python interactivo con gestión de ventas y clientes
-- Análisis estadístico completo ⭐
+- **Machine Learning: Predicción de ventas con Random Forest** ⭐ NUEVO
+- Análisis estadístico completo
 - Guía para dashboard en Power BI
 - Documentación completa
 - Guía para presentación oral

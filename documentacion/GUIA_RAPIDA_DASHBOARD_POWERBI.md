@@ -1,4 +1,4 @@
-# 🚀 GUÍA RÁPIDA: Crear Dashboard Power BI - Tienda Aurelion (Sprint 2)
+# 🚀 GUÍA RÁPIDA: Crear Dashboard Power BI - Tienda Aurelion (Sprint 3)
 
 ## ⚡ Tiempo estimado: 20-30 minutos
 
@@ -337,7 +337,7 @@ Si tenés tiempo, podés crear:
 
 1. **File** → **Export** → **Power BI template**
 2. Nombre: **`Tienda_Aurelion_Template_Sprint2.pbit`**
-3. Agrega una descripción: "Dashboard de gestión de inventario, ventas y clientes - Tienda Aurelion Sprint 2"
+3. Agrega una descripción: "Dashboard de gestión de inventario, ventas y clientes - Tienda Aurelion Sprint 3"
 4. Click en **OK**
 
 #### Exportar capturas de pantalla
@@ -448,7 +448,7 @@ File.Contents("D:/IBM/IBM-Inteligencia-Artificial/Sprint-2/datos/productos.csv")
 
 **Autor:** Martos Ludmila  
 **DNI:** 34811650  
-**Institución:** IBM - Sprint 2  
+**Institución:** IBM - Sprint 3  
 **Año:** 2025
 
 ---

@@ -223,7 +223,7 @@ Todas las guías incluyen secciones de **"Solución de Problemas"** con:
 ---
 
 **Creado por:** Asistente AI  
-**Para:** Martos Ludmila - Sprint 2 IBM  
+**Para:** Martos Ludmila - Sprint 3 IBM  
 **Fecha:** Noviembre 2025  
 **Dashboard:** Tienda Aurelion ⚔️
 

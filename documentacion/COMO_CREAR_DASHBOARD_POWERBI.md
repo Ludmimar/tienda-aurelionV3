@@ -1,6 +1,6 @@
 # 🚀 CÓMO CREAR EL DASHBOARD EN POWER BI - GUÍA MAESTRA
 
-## ⚔️ Tienda Aurelion - Sprint 2
+## ⚔️ Tienda Aurelion - Sprint 3
 
 Esta es la **guía maestra** que te dirigirá a todos los recursos necesarios para crear tu dashboard de Power BI en 30 minutos.
 

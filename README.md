@@ -38,7 +38,7 @@
 
 **¡Prueba la aplicación directamente en tu navegador!**
 
-🔗 **[Acceder a la Aplicación Web](https://tienda-aurelionv2.streamlit.app/)**
+🔗 **[Acceder a la Aplicación Web](https://tienda-aurelionv3.streamlit.app/)**
 
 > ✨ **Ventajas:** No requiere instalación, funciona inmediatamente, siempre actualizada
 
@@ -94,21 +94,37 @@ jupyter notebook programas/tienda_aurelion.ipynb
 
 #### 🚀 Ejecutar el Modelo
 
+**Machine Learning está disponible en TODAS las aplicaciones:**
+
+| Aplicación | Comando | ML Incluido |
+|------------|---------|:-----------:|
+| **Consola Python** | `python programas/tienda_aurelion.py` (opciones 16-17) | ✅ |
+| **App Web Streamlit** | `streamlit run programas/app_streamlit.py` | ✅ |
+| **Jupyter Notebook** | `jupyter notebook programas/tienda_aurelion.ipynb` | ✅ |
+| **Análisis Estadístico** | `jupyter notebook programas/analisis_estadistico.ipynb` | ✅ |
+| **Script ML Standalone** | `python programas/modelo_ml_ventas.py` | ✅ |
+
 ```bash
 # Instalar dependencias (solo primera vez)
 pip install pandas numpy matplotlib seaborn scikit-learn
 
-# Ejecutar modelo ML
+# Opción 1: Ejecutar modelo ML standalone
 python programas/modelo_ml_ventas.py
+
+# Opción 2: Usar ML en la consola interactiva
+python programas/tienda_aurelion.py
+# Luego seleccionar opción 16 (Entrenar modelo) o 17 (Predecir venta)
+
+# Opción 3: Usar ML en la app web
+streamlit run programas/app_streamlit.py
+# Ir a la sección "🤖 Machine Learning"
 ```
 
 **Salidas generadas**:
-- ✅ Métricas de evaluación en consola
-- ✅ 4 gráficos profesionales en `graficos/modelo_ml_resultados.png`
-  - Predicciones vs Valores Reales
-  - Distribución de Errores
-  - Importancia de Características
-  - Residuos vs Predicciones
+- ✅ Métricas de evaluación (R², MAE, RMSE, MAPE)
+- ✅ Importancia de características
+- ✅ Predictor interactivo (consola y web)
+- ✅ 4 gráficos profesionales en `graficos/`
 
 #### 📊 Resultados Esperados
 
@@ -155,7 +171,7 @@ Desarrollo de un **Sistema Interactivo de Gestión de Inventario** implementado 
 
 #### 🌐 **Versión 2: Aplicación Web Streamlit** (`app_streamlit.py`) ⭐
 - Interfaz web profesional en el navegador
-- **Disponible online:** [https://tienda-aurelionv2.streamlit.app/](https://tienda-aurelionv2.streamlit.app/) ⭐⭐
+- **Disponible online:** [https://tienda-aurelionv3.streamlit.app/](https://tienda-aurelionv3.streamlit.app/) ⭐⭐
 - Gráficos interactivos en tiempo real
 - Filtros dinámicos (sliders, dropdowns)
 - Dashboard visual completo
@@ -596,7 +612,7 @@ python programas/tienda_aurelion.py
 ### Opción 2: Aplicación Web Online ⭐⭐ RECOMENDADO (Sin instalaciones)
 
 **Acceso directo:**
-🔗 **[Acceder a la Aplicación Web Online](https://tienda-aurelionv2.streamlit.app/)**
+🔗 **[Acceder a la Aplicación Web Online](https://tienda-aurelionv3.streamlit.app/)**
 
 **Ventajas:**
 - ✅ Sin instalación requerida
@@ -740,7 +756,7 @@ Para más información, consulta:
 
 ### 🌐 Enlaces del Proyecto
 
-- 🔗 **[Aplicación Web Online](https://tienda-aurelionv2.streamlit.app/)** ⭐⭐ - Acceso directo sin instalaciones
+- 🔗 **[Aplicación Web Online](https://tienda-aurelionv3.streamlit.app/)** ⭐⭐ - Acceso directo sin instalaciones
 
 ---
 
@@ -779,11 +795,12 @@ Este proyecto demuestra conceptos fundamentales de:
 **📁 programas/:**
 | Archivo | Descripción |
 |---------|-------------|
-| `tienda_aurelion.py` | Programa de consola Python (mejorado con ventas y clientes) |
-| `app_streamlit.py` | Aplicación web Streamlit mejorada ⭐ |
-| `tienda_aurelion.ipynb` | Jupyter Notebook interactivo |
+| `tienda_aurelion.py` | Consola Python con ML (opciones 16-17) ⭐ |
+| `app_streamlit.py` | App web Streamlit con ML integrado ⭐⭐ |
+| `tienda_aurelion.ipynb` | Jupyter Notebook con ML ⭐ |
 | `analisis_estadistico.py` | Script de análisis estadístico completo ⭐ |
-| `analisis_estadistico.ipynb` | Notebook de análisis estadístico completo ⭐⭐ |
+| `analisis_estadistico.ipynb` | Análisis estadístico + ML ⭐⭐ |
+| `modelo_ml_ventas.py` | Script ML standalone (genera gráficos) ⭐ |
 
 **📁 documentacion/:**
 | Archivo | Descripción |

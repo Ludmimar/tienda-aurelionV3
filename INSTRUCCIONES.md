@@ -242,7 +242,7 @@ Sube toda la carpeta `Entregable/` con su estructura de subcarpetas:
 **👨‍💻 Autor:** Martos Ludmila  
 **📋 DNI:** 34811650  
 **🏢 Institución:** IBM  
-**📅 Sprint:** 2 - Introducción a la Inteligencia Artificial  
+**📅 Sprint:** 3 - Machine Learning  
 **📆 Año:** 2025
 
 ---

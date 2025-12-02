@@ -3,7 +3,7 @@
 ## ✅ VERIFICACIÓN DE ESTRUCTURA DEL PROYECTO
 
 **Fecha de análisis:** 2025  
-**Proyecto:** Tienda Aurelion - Sprint 2  
+**Proyecto:** Tienda Aurelion - Sprint 3 - Machine Learning  
 **Autor:** Martos Ludmila
 
 ---
@@ -96,7 +96,7 @@
 ### Documentación
 - ✅ Todas las guías requeridas están presentes
 - ✅ Documentación completa y actualizada
-- ✅ Todas las secciones del Sprint 2 están cubiertas
+- ✅ Todas las secciones del Sprint 3 están cubiertas
 
 ### Gráficos
 - ✅ Los 3 gráficos requeridos están generados

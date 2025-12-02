@@ -302,7 +302,7 @@ Una vez que tu dashboard se vea como estos layouts:
 ---
 
 **🎨 Diseñado por:** Martos Ludmila  
-**🏢 Institución:** IBM - Sprint 2  
+**🏢 Institución:** IBM - Sprint 3  
 **📅 Año:** 2025  
 **⚔️ Tema:** Tienda Aurelion - Medieval Fantasy Dashboard
 

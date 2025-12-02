@@ -238,6 +238,6 @@ El proyecto ahora tiene:
 
 **📅 Fecha de reorganización:** Noviembre 2025  
 **👤 Autor:** Martos Ludmila - DNI: 34811650  
-**🏢 Proyecto:** Sprint 2 - IBM - Introducción a la Inteligencia Artificial  
+**🏢 Proyecto:** Sprint 3 - IBM - Machine Learning  
 **⭐ Estado:** OPTIMIZADO Y LISTO PARA ENTREGA
 

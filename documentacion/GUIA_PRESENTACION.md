@@ -29,7 +29,7 @@
 ║        ⚔️  TIENDA AURELION ⚔️            ║
 ║   Sistema de Gestión de Inventario        ║
 ║                                           ║
-║   Sprint 2 - Introducción a la IA         ║
+║   Sprint 3 - Machine Learning             ║
 ║              IBM - 2025                   ║
 ║                                           ║
 ║   Presentado por: [Tu Nombre]             ║
@@ -38,7 +38,7 @@
 ```
 
 **Qué decir:**
-> "Buenos días/tardes. Mi nombre es [Ludmila Martos] y hoy les presentaré el proyecto Tienda Aurelion, un sistema de gestión de inventario desarrollado como parte del Sprint 2 de Introducción a la Inteligencia Artificial de IBM."
+> "Buenos días/tardes. Mi nombre es [Ludmila Martos] y hoy les presentaré el proyecto Tienda Aurelion, un sistema de gestión de inventario con Machine Learning desarrollado como parte del Sprint 3 de IBM."
 
 ---
 
